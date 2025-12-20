@@ -35,7 +35,11 @@ export default function ProductManager() {
         }])
 
         if (error) {
-            alert('Error adding product: ' + error.message)
+            if (error.code === '23505' || error.message.includes('unique constraint') || error.message.includes('Conflict')) {
+                alert('Duplicate Product! A product with this barcode already exists.')
+            } else {
+                alert('Error adding product: ' + error.message)
+            }
         } else {
             setNewProduct({ barcode: '', name: '', price: '', variant: '' })
             fetchProducts()
@@ -68,22 +72,25 @@ export default function ProductManager() {
         <div>
             <div className="glass-panel" style={{ padding: '1rem', marginBottom: '1rem' }}>
                 <h3>Add New Product</h3>
-                <form onSubmit={handleAdd} style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 0.8fr 0.8fr auto', gap: '0.5rem', marginTop: '1rem' }}>
+                <form onSubmit={handleAdd} style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '1rem' }}>
                     <input
                         placeholder="Barcode"
                         className="input-field"
+                        style={{ flex: '1 1 40%' }}
                         value={newProduct.barcode}
                         onChange={e => setNewProduct({ ...newProduct, barcode: e.target.value })}
                     />
                     <input
                         placeholder="Product Name"
                         className="input-field"
+                        style={{ flex: '1 1 50%' }}
                         value={newProduct.name}
                         onChange={e => setNewProduct({ ...newProduct, name: e.target.value })}
                     />
                     <input
                         placeholder="Size (e.g 1L)"
                         className="input-field"
+                        style={{ flex: '1 1 30%' }}
                         value={newProduct.variant}
                         onChange={e => setNewProduct({ ...newProduct, variant: e.target.value })}
                     />
@@ -91,10 +98,11 @@ export default function ProductManager() {
                         type="number"
                         placeholder="AED"
                         className="input-field"
+                        style={{ flex: '1 1 20%' }}
                         value={newProduct.price}
                         onChange={e => setNewProduct({ ...newProduct, price: e.target.value })}
                     />
-                    <button type="submit" className="btn btn-primary"><Plus size={20} /></button>
+                    <button type="submit" className="btn btn-primary" style={{ flex: '1 1 100%' }}>Add Product</button>
                 </form>
             </div>
 

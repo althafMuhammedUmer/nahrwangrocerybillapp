@@ -113,15 +113,15 @@ export default function POS() {
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Header */}
             <header className="glass-panel" style={{ padding: '0.75rem', display: 'flex', justifyContent: 'space-between', borderRadius: 0, borderTop: 0, borderLeft: 0, borderRight: 0 }}>
-                <div style={{ fontWeight: 'bold' }}>Nahrawan Grocery POS</div>
+                <div style={{ fontWeight: 'bold' }}>Dubai Grocery POS</div>
                 <Link to="/admin" style={{ color: 'white' }}><Menu /></Link>
             </header>
 
-            {/* Main Grid */}
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 350px', overflow: 'hidden' }}>
+            {/* Main Layout - stacked on mobile, side-by-side on desktop */}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem', overflow: 'hidden', position: 'relative' }}>
 
-                {/* Left: Product Selection */}
-                <div style={{ padding: '1rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {/* Product Area */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem', overflowY: 'auto' }}>
                     <form onSubmit={handleBarcodeSubmit} style={{ display: 'flex', gap: '0.5rem' }}>
                         <input
                             autoFocus
@@ -131,70 +131,79 @@ export default function POS() {
                             onChange={e => setBarcode(e.target.value)}
                         />
                         <input
-                            placeholder="Search Name..."
+                            placeholder="Search..."
                             className="input-field"
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                         />
                     </form>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '0.75rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.75rem', paddingBottom: '300px' /* Space for floating cart on mobile */ }}>
                         {filteredProducts.map(product => (
                             <button
                                 key={product.id}
                                 onClick={() => addToCart(product)}
                                 className="glass-panel"
-                                style={{ padding: '1rem', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '100px', border: '1px solid rgba(255,255,255,0.1)' }}
+                                style={{ padding: '0.75rem', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '90px', border: '1px solid rgba(255,255,255,0.1)' }}
                             >
-                                <div style={{ fontWeight: '600' }}>
+                                <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>
                                     {product.name}
                                     {product.variant && <span style={{ display: 'block', fontSize: '0.8em', color: 'var(--color-accent)', fontWeight: 'normal' }}>{product.variant}</span>}
                                 </div>
-                                <div style={{ color: 'var(--color-primary)', marginTop: '0.5rem' }}>AED {product.price}</div>
+                                <div style={{ color: 'var(--color-primary)', marginTop: '0.5rem', fontWeight: 'bold' }}>AED {product.price}</div>
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Right: Cart */}
-                <div className="glass-panel" style={{ margin: '1rem', borderRadius: '1rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                    <div style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)', fontWeight: 'bold' }}>Current Bill</div>
+                {/* Mobile Floating Cart / Desktop Sidebar */}
+                {/* Logic: On mobile it should be a bottom sheet or fixed bottom area. For now, simple fixed bottom. */}
+                <div className="glass-panel"
+                    style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: cart.length > 0 ? '45%' : '60px',
+                        transition: 'height 0.3s ease-out',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        zIndex: 10,
+                        borderBottomLeftRadius: 0,
+                        borderBottomRightRadius: 0,
+                        boxShadow: '0 -4px 20px rgba(0,0,0,0.4)'
+                    }}
+                >
+                    <div
+                        style={{ padding: '0.75rem', borderBottom: '1px solid rgba(255,255,255,0.1)', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', background: 'rgba(255,255,255,0.05)' }}
+                        onClick={() => {/* Toggle expand logic could go here if state added, but fixed height 45% when active is decent for now */ }}
+                    >
+                        <span>Current Bill ({cart.length})</span>
+                        <span>AED {total.toFixed(2)}</span>
+                    </div>
 
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '1rem', display: cart.length > 0 ? 'block' : 'none' }}>
                         {cart.map(item => (
-                            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', alignItems: 'center' }}>
+                            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center', fontSize: '0.9rem' }}>
                                 <div style={{ flex: 1 }}>
                                     <div>{item.name} <span style={{ fontSize: '0.8em', color: 'var(--color-accent)' }}>{item.variant}</span></div>
-                                    <div style={{ fontSize: '0.8rem', color: '#aaa' }}>AED {item.price} x {item.quantity}</div>
+                                    <div style={{ fontSize: '0.8rem', color: '#aaa' }}>{item.quantity} x {item.price}</div>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     <div style={{ fontWeight: 'bold' }}>{(item.price * item.quantity).toFixed(2)}</div>
-                                    <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: 'none', color: 'var(--color-danger)', cursor: 'pointer' }}><Trash2 size={16} /></button>
+                                    <button onClick={() => removeFromCart(item.id)} style={{ background: 'none', border: 'none', color: 'var(--color-danger)' }}><Trash2 size={16} /></button>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.3)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                            <span>Subtotal (Ex. VAT)</span>
-                            <span>{(total - vat).toFixed(2)}</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', color: '#aaa' }}>
-                            <span>VAT (5%)</span>
-                            <span>{vat.toFixed(2)}</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                            <span>Total</span>
-                            <span>AED {total.toFixed(2)}</span>
-                        </div>
+                    <div style={{ padding: '0.75rem', background: 'rgba(0,0,0,0.3)', display: cart.length > 0 ? 'block' : 'none' }}>
                         <button
                             onClick={handleCheckout}
                             className="btn btn-primary"
                             style={{ width: '100%' }}
-                            disabled={cart.length === 0}
                         >
-                            Checkout & Print
+                            Checkout & Print (AED {total.toFixed(2)})
                         </button>
                     </div>
                 </div>

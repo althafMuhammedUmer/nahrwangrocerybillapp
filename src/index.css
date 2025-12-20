@@ -2,13 +2,15 @@
 
 :root {
   --font-family: 'Inter', system-ui, sans-serif;
-  
+
   /* Modern Palette - Deep Blue / Purple Night Theme */
   --color-bg: #0f172a;
   --color-surface: #1e293b;
-  --color-primary: #6366f1; /* Indigo 500 */
+  --color-primary: #6366f1;
+  /* Indigo 500 */
   --color-primary-hover: #4f46e5;
-  --color-accent: #10b981; /* Emerald 500 */
+  --color-accent: #10b981;
+  /* Emerald 500 */
   --color-danger: #ef4444;
   --color-text-main: #f8fafc;
   --color-text-dim: #94a3b8;
@@ -18,7 +20,7 @@
   --glass-bg: rgba(30, 41, 59, 0.7);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-blur: 12px;
-  
+
   /* Spacing */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
@@ -47,11 +49,12 @@ body {
 }
 
 #root {
-  max-width: 480px; /* Mobile constraint */
+  max-width: 480px;
+  /* Mobile constraint */
   margin: 0 auto;
   min-height: 100vh;
   background-color: var(--color-surface);
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
 }
@@ -82,7 +85,10 @@ body {
   background-color: var(--color-primary);
   color: white;
 }
-.btn-primary:active { transform: scale(0.98); }
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
 
 .btn-secondary {
   background-color: transparent;
@@ -94,14 +100,27 @@ body {
   width: 100%;
   padding: 0.75rem;
   border-radius: var(--radius-md);
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--color-border);
   color: white;
   font-size: 1rem;
 }
+
 .input-field:focus {
   outline: none;
   border-color: var(--color-primary);
+}
+
+@media (max-width: 400px) {
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .input-field {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
 }
 
 /* Print Overrides */
@@ -112,5 +131,8 @@ body {
     background: white;
     color: black;
   }
-  .no-print { display: none !important; }
+
+  .no-print {
+    display: none !important;
+  }
 }
