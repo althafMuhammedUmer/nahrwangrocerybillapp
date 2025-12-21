@@ -90,26 +90,17 @@ export default function BillHistory() {
 
                             {expanded === bill.id && (
                                 <div style={{ padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.2)' }}>
-                                    <table style={{ width: '100%', fontSize: '0.9rem', marginBottom: '1rem' }}>
-                                        <thead>
-                                            <tr style={{ textAlign: 'left', color: '#aaa' }}>
-                                                <th>Item</th>
-                                                <th>Qty</th>
-                                                <th>Price</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {(billItems[bill.id] || []).map(item => (
-                                                <tr key={item.id}>
-                                                    <td>{item.product_name}</td>
-                                                    <td>{item.quantity}</td>
-                                                    <td>{item.price_at_sale}</td>
-                                                    <td>{item.total}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                    <div style={{ marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                        {(billItems[bill.id] || []).map(item => (
+                                            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.25rem' }}>
+                                                <div style={{ flex: 1, paddingRight: '0.5rem' }}>
+                                                    <div>{item.product_name}</div>
+                                                    <div style={{ fontSize: '0.8rem', color: '#aaa' }}>{item.quantity} x {item.price_at_sale}</div>
+                                                </div>
+                                                <div style={{ fontWeight: 'bold' }}>{item.total}</div>
+                                            </div>
+                                        ))}
+                                    </div>
                                     <button onClick={() => handleReprint(bill)} className="btn btn-secondary" style={{ width: '100%', gap: '0.5rem' }}>
                                         <Printer size={16} /> Reprint Receipt
                                     </button>

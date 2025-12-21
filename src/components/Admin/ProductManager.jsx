@@ -125,11 +125,13 @@ export default function ProductManager() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '400px', overflowY: 'auto' }}>
                         {filtered.map(product => (
                             <div key={product.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.05)', padding: '0.75rem', borderRadius: '0.5rem' }}>
-                                <div>
-                                    <div style={{ fontWeight: 'bold' }}>{product.name} <span style={{ fontSize: '0.8em', color: 'var(--color-accent)' }}>{product.variant}</span></div>
+                                <div style={{ overflow: 'hidden', marginRight: '1rem' }}>
+                                    <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        {product.name} <span style={{ fontSize: '0.8em', color: 'var(--color-accent)' }}>{product.variant}</span>
+                                    </div>
                                     <div style={{ fontSize: '0.8rem', color: '#aaa' }}>{product.barcode}</div>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
                                     <div style={{ color: 'var(--color-primary)' }}>AED {product.price}</div>
                                     <button onClick={() => handleDelete(product.id)} className="btn" style={{ padding: '0.5rem', color: 'var(--color-danger)' }}>
                                         <Trash2 size={16} />

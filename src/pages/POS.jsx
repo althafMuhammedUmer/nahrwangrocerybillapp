@@ -182,6 +182,16 @@ export default function POS() {
                         <span>AED {total.toFixed(2)}</span>
                     </div>
 
+                    {/*
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                        <span>Subtotal (Ex. VAT)</span>
+                        <span>{(total - vat).toFixed(2)}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', color: '#aaa' }}>
+                        <span>VAT (5%)</span>
+                        <span>{vat.toFixed(2)}</span>
+                    </div>
+                    */}
                     <div style={{ flex: 1, overflowY: 'auto', padding: '1rem', display: cart.length > 0 ? 'block' : 'none' }}>
                         {cart.map(item => (
                             <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center', fontSize: '0.9rem' }}>

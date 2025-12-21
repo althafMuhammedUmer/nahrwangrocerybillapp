@@ -17,9 +17,9 @@ export default function AdminDashboard() {
 
     return (
         <div style={{ padding: '1rem', paddingBottom: '5rem' }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <header style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <div>
-                
+                    <h1 style={{ fontSize: '1.5rem', margin: 0 }}>Admin Dashboard</h1>
                     <p style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)' }}>Manage Store</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>

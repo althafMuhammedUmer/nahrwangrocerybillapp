@@ -8,8 +8,8 @@ export function SupabaseProvider({ children }) {
     const [isReady, setIsReady] = useState(false)
 
     useEffect(() => {
-        const url = localStorage.getItem('sb_url') || import.meta.env.VITE_SUPABASE_URL
-        const key = localStorage.getItem('sb_key') || import.meta.env.VITE_SUPABASE_ANON_KEY
+        const url = import.meta.env.VITE_SUPABASE_URL
+        const key = import.meta.env.VITE_SUPABASE_ANON_KEY
 
         if (url && key) {
             try {
@@ -22,26 +22,12 @@ export function SupabaseProvider({ children }) {
         setIsReady(true)
     }, [])
 
-    const updateCredentials = (url, key) => {
-        if (!url || !key) return
-        localStorage.setItem('sb_url', url)
-        localStorage.setItem('sb_key', key)
-        try {
-            const client = createClient(url, key)
-            setSupabase(client)
-        } catch (e) {
-            alert("Invalid URL or Key format")
-        }
-    }
-
     const disconnect = () => {
-        localStorage.removeItem('sb_url')
-        localStorage.removeItem('sb_key')
-        setSupabase(null)
+        // No-op since we depend on Env now.
     }
 
     return (
-        <SupabaseContext.Provider value={{ supabase, updateCredentials, disconnect, isReady }}>
+        <SupabaseContext.Provider value={{ supabase, disconnect, isReady }}>
             {children}
         </SupabaseContext.Provider>
     )

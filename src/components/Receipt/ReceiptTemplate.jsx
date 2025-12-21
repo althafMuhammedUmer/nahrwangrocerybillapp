@@ -8,8 +8,8 @@ export const ReceiptTemplate = forwardRef(({ cart, total, vat, date, invoiceId }
                 <h2>AL NAHRAWAN GROCERY</h2>
                 <p>Dubai, UAE</p>
                 <p>TRN: 100211383300003</p>
-                <h3>+971581156118</h3>
-                <p>TEL:- 042722718</p>
+                <h3>TAX INVOICE</h3>
+
             </div>
 
             <div className="receipt-meta">
