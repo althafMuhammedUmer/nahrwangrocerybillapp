@@ -188,7 +188,7 @@ export default function POS() {
                                     className="glass-panel"
                                     style={{ padding: '0.75rem', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '90px', border: '1px solid rgba(255,255,255,0.1)' }}
                                 >
-                                    <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>
+                                    <div style={{ fontWeight: '600', fontSize: '0.9rem', color: 'white' }}>
                                         {product.name}
                                         {product.variant && <span style={{ display: 'block', fontSize: '0.8em', color: 'var(--color-accent)', fontWeight: 'normal' }}>{product.variant}</span>}
                                     </div>
@@ -239,7 +239,7 @@ export default function POS() {
                         {cart.map(item => (
                             <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center', fontSize: '0.9rem' }}>
                                 <div style={{ flex: 1 }}>
-                                    <div>{item.name} <span style={{ fontSize: '0.8em', color: 'var(--color-accent)' }}>{item.variant}</span></div>
+                                    <div style={{ color: 'white' }}>{item.name} <span style={{ fontSize: '0.8em', color: 'var(--color-accent)' }}>{item.variant}</span></div>
                                     <div style={{ fontSize: '0.8rem', color: '#aaa' }}>{item.quantity} x {item.price}</div>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

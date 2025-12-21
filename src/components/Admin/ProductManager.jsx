@@ -126,7 +126,7 @@ export default function ProductManager() {
                         {filtered.map(product => (
                             <div key={product.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.05)', padding: '0.75rem', borderRadius: '0.5rem' }}>
                                 <div style={{ overflow: 'hidden', marginRight: '1rem' }}>
-                                    <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white' }}>
                                         {product.name} <span style={{ fontSize: '0.8em', color: 'var(--color-accent)' }}>{product.variant}</span>
                                     </div>
                                     <div style={{ fontSize: '0.8rem', color: '#aaa' }}>{product.barcode}</div>

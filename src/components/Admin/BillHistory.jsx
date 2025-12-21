@@ -94,7 +94,7 @@ export default function BillHistory() {
                                         {(billItems[bill.id] || []).map(item => (
                                             <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.25rem' }}>
                                                 <div style={{ flex: 1, paddingRight: '0.5rem' }}>
-                                                    <div>{item.product_name}</div>
+                                                    <div style={{ color: 'white' }}>{item.product_name}</div>
                                                     <div style={{ fontSize: '0.8rem', color: '#aaa' }}>{item.quantity} x {item.price_at_sale}</div>
                                                 </div>
                                                 <div style={{ fontWeight: 'bold' }}>{item.total}</div>
