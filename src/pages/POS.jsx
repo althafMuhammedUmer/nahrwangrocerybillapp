@@ -113,7 +113,7 @@ export default function POS() {
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Header */}
             <header className="glass-panel" style={{ padding: '0.75rem', display: 'flex', justifyContent: 'space-between', borderRadius: 0, borderTop: 0, borderLeft: 0, borderRight: 0 }}>
-                <div style={{ fontWeight: 'bold' }}>Dubai Grocery POS</div>
+                <div style={{ fontWeight: 'bold' }}>AL Nahrawan Grocery POS</div>
                 <Link to="/admin" style={{ color: 'white' }}><Menu /></Link>
             </header>
 
