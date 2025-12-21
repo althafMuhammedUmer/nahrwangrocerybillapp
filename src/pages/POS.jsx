@@ -14,6 +14,7 @@ export default function POS() {
     const [products, setProducts] = useState([])
     const [search, setSearch] = useState('')
     const [loading, setLoading] = useState(false)
+    const [lastBill, setLastBill] = useState(null) // To hold data for printing even after cart is cleared
 
     const [error, setError] = useState(null)
 
@@ -109,12 +110,28 @@ export default function POS() {
 
         await supabase.from('bill_items').insert(items)
 
-        // Print
-        // We set the print state triggers if needed, but here we just call print
+        // Print Logic
+        // We delay the print slightly to ensure DOM is ready, but we DO NOT clear the cart immediately.
+        // We will let the user clear it or auto-clear after a "Success" flag is safely handled.
+        // Actually, for POS, it's safer to clear AFTER the print dialog is closed or we can just hope 500ms is enough?
+        // NO, 500ms is Risky. 
+        // Better: We trigger print, and then we have a "Printing..." state or similar. 
+        // For now, let's just NOT clear the cart automatically inside the timeout. 
+        // We will clear it, but maybe wait longer? Or duplicate the cart data into a separate "lastBill" state for the receipt?
+        // YES, "lastBill" state is the robust way.
+
+        setLastBill({
+            cart: [...cart],
+            total,
+            vat,
+            date: new Date().toLocaleString(),
+            invoiceId: bill.id
+        })
+
         setTimeout(() => {
             window.print()
             setCart([])
-        }, 500) // Increased delay slightly to allow DOM to settle
+        }, 1000)
     }
 
     const filteredProducts = products.filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
@@ -246,15 +263,18 @@ export default function POS() {
             </div>
 
             {/* Hidden Receipt - Visible only on Print */}
+            {/* Hidden Receipt - Visible only on Print. Uses 'lastBill' so it doesn't clear when cart clears. */}
             <div className="printable-area">
-                <ReceiptTemplate
-                    ref={receiptRef}
-                    cart={cart}
-                    total={total}
-                    vat={vat}
-                    date={new Date().toLocaleString()}
-                    invoiceId="PENDING"
-                />
+                {lastBill && (
+                    <ReceiptTemplate
+                        ref={receiptRef}
+                        cart={lastBill.cart}
+                        total={lastBill.total}
+                        vat={lastBill.vat}
+                        date={lastBill.date}
+                        invoiceId={lastBill.invoiceId}
+                    />
+                )}
             </div>
         </div>
     )
