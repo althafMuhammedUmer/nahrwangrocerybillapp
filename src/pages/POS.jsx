@@ -15,6 +15,8 @@ export default function POS() {
     const [search, setSearch] = useState('')
     const [loading, setLoading] = useState(false)
 
+    const [error, setError] = useState(null)
+
     // Print Ref
     const receiptRef = useRef()
 
@@ -24,9 +26,17 @@ export default function POS() {
 
     const fetchProducts = async () => {
         setLoading(true)
-        const { data } = await supabase.from('products').select('*')
-        if (data) setProducts(data)
-        setLoading(false)
+        setError(null)
+        try {
+            const { data, error } = await supabase.from('products').select('*')
+            if (error) throw error
+            if (data) setProducts(data)
+        } catch (err) {
+            console.error("Error fetching products:", err)
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     const addToCart = (product) => {
@@ -114,7 +124,12 @@ export default function POS() {
             {/* Header */}
             <header className="glass-panel" style={{ padding: '0.75rem', display: 'flex', justifyContent: 'space-between', borderRadius: 0, borderTop: 0, borderLeft: 0, borderRight: 0 }}>
                 <div style={{ fontWeight: 'bold' }}>AL Nahrawan Grocery POS</div>
-                <Link to="/admin" style={{ color: 'white' }}><Menu /></Link>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={fetchProducts} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }} title="Refresh Products">
+                        <History size={20} />
+                    </button>
+                    <Link to="/admin" style={{ color: 'white' }}><Menu /></Link>
+                </div>
             </header>
 
             {/* Main Layout - stacked on mobile, side-by-side on desktop */}
@@ -138,22 +153,33 @@ export default function POS() {
                         />
                     </form>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.75rem', paddingBottom: '300px' /* Space for floating cart on mobile */ }}>
-                        {filteredProducts.map(product => (
-                            <button
-                                key={product.id}
-                                onClick={() => addToCart(product)}
-                                className="glass-panel"
-                                style={{ padding: '0.75rem', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '90px', border: '1px solid rgba(255,255,255,0.1)' }}
-                            >
-                                <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>
-                                    {product.name}
-                                    {product.variant && <span style={{ display: 'block', fontSize: '0.8em', color: 'var(--color-accent)', fontWeight: 'normal' }}>{product.variant}</span>}
-                                </div>
-                                <div style={{ color: 'var(--color-primary)', marginTop: '0.5rem', fontWeight: 'bold' }}>AED {product.price}</div>
-                            </button>
-                        ))}
-                    </div>
+                    {loading && <div style={{ textAlign: 'center', padding: '2rem' }}>Loading Products...</div>}
+
+                    {error && (
+                        <div style={{ textAlign: 'center', padding: '1rem', color: 'var(--color-danger)', border: '1px solid var(--color-danger)', borderRadius: '0.5rem' }}>
+                            <p>Error loading products</p>
+                            <button onClick={fetchProducts} className="btn btn-secondary" style={{ marginTop: '0.5rem' }}>Retry</button>
+                        </div>
+                    )}
+
+                    {!loading && !error && (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.75rem', paddingBottom: '300px' /* Space for floating cart on mobile */ }}>
+                            {filteredProducts.map(product => (
+                                <button
+                                    key={product.id}
+                                    onClick={() => addToCart(product)}
+                                    className="glass-panel"
+                                    style={{ padding: '0.75rem', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: '90px', border: '1px solid rgba(255,255,255,0.1)' }}
+                                >
+                                    <div style={{ fontWeight: '600', fontSize: '0.9rem' }}>
+                                        {product.name}
+                                        {product.variant && <span style={{ display: 'block', fontSize: '0.8em', color: 'var(--color-accent)', fontWeight: 'normal' }}>{product.variant}</span>}
+                                    </div>
+                                    <div style={{ color: 'var(--color-primary)', marginTop: '0.5rem', fontWeight: 'bold' }}>AED {product.price}</div>
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Mobile Floating Cart / Desktop Sidebar */}
